@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  parking-slot-management-service:
+    build:
+      context: ./Parking-Slot-Management-Service
+    ports:
+      - "3000:3000"
+    networks:
+      - parking_network
+    depends_on:
+      - mongodb
+
+  violation-detection-service:
+    build:
+      context: ./Violation-Detection-Service
+    ports:
+      - "3001:3001"
+    networks:
+      - parking_network
+    depends_on:
+      - mongodb
+
+  challan-generation-service:
+    build:
+      context: ./Challan-Generation-Service
+    ports:
+      - "3002:3002"
+    networks:
+      - parking_network
+    depends_on:
+      - mongodb
+
+  payment-service:
+    build:
+      context: ./Payment-Service
+    ports:
+      - "3003:3003"
+    networks:
+      - parking_network
+    depends_on:
+      - mongodb
+
+  reporting-analytics-service:
+    build:
+      context: ./Reporting-Analytics-Service
+    ports:
+      - "3004:3004"
+    networks:
+      - parking_network
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb-data:/data/db
+    networks:
+      - parking_network
+
+networks:
+  parking_network:
+    driver: bridge
+
+volumes:
+  mongodb-data:
+    driver: local
